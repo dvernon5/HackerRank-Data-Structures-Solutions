@@ -1,2 +1,2 @@
 # HackerRank-Data-Structures-Solutions
-Solutions to HackerRank Problem
+Solutions to HackerRank Problems
