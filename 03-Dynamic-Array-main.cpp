@@ -7,23 +7,30 @@ string ltrim(const string &);
 string rtrim(const string &);
 vector<string> split(const string &);
 
+/*
+ * Complete the 'dynamicArray' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts following parameters:
+ *  1. INTEGER n
+ *  2. 2D_INTEGER_ARRAY queries
+ */
+
 vector<int> dynamicArray(int n, vector<vector<int>> queries)
 {
+    vector<vector<int>> seq(n);
+    vector<int> ans;
     int lastAnswer = 0;
+    int queriesSize = (int)queries.size();
     
-    vector <vector<int>> seq(n);
-    vector <int> ans;
-    
-    for(int i = 0; i < queries.size(); i++)
+    for (int i = 0; i < queriesSize; i++)
     {
         int k = (lastAnswer ^ queries[i][1]) % n;
         
-        if(queries[i][0] == 1)
+        if (queries[i][0] == 1)
         {
             seq[k].push_back(queries[i][2]);
-        }
-        
-        else if(queries[i][0] == 2)
+        } else if (queries[i][0] == 2)
         {
             int ind = queries[i][2] % (seq[k].size());
             lastAnswer = seq[k][ind];
@@ -32,7 +39,6 @@ vector<int> dynamicArray(int n, vector<vector<int>> queries)
     }
     return ans;
 }
-
 
 int main(void)
 {
