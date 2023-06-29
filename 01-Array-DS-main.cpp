@@ -1,40 +1,103 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(void)
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
+
+/*
+ * Complete the 'reverseArray' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts INTEGER_ARRAY a as parameter.
+ */
+
+vector<int> reverseArray(vector<int> a) {
+    vector<int> result;
+    
+    for (vector<int>::reverse_iterator itr = a.rbegin(); itr != a.rend(); ++itr)
+    {
+        result.push_back(*itr);
+    }
+
+    return result;
+}
+
+int main()
 {
-    
-    //User input for the maximum number in an array.
-    int number;
-    cin  >> number;
-    
-    // An Array of n size.
-    int array[number];
-    
-    // User input numbers into the array.
-    for (int i = 0; i < number; i++)
-    {
-        cin  >> array[i];
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string arr_count_temp;
+    getline(cin, arr_count_temp);
+
+    int arr_count = stoi(ltrim(rtrim(arr_count_temp)));
+
+    string arr_temp_temp;
+    getline(cin, arr_temp_temp);
+
+    vector<string> arr_temp = split(rtrim(arr_temp_temp));
+
+    vector<int> arr(arr_count);
+
+    for (int i = 0; i < arr_count; i++) {
+        int arr_item = stoi(arr_temp[i]);
+
+        arr[i] = arr_item;
     }
-    
-    // Reversing an array.
-    for (int i = 0; i < number / 2; i++)
-    {
-        int temp = array[i];
-        array[i] = array[number - i - 1];
-        array[number - i - 1] = temp;
+
+    vector<int> res = reverseArray(arr);
+
+    for (size_t i = 0; i < res.size(); i++) {
+        fout << res[i];
+
+        if (i != res.size() - 1) {
+            fout << " ";
+        }
     }
-    
-    
-    
-    // Display the result of a reverse array.
-    for (int i = 0; i < number; i++)
-    {
-        cout << array[i] << " ";
-    }
-    
-    cout << endl;
-    
+
+    fout << "\n";
+
+    fout.close();
+
     return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
 }
