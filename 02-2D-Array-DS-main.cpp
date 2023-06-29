@@ -1,43 +1,101 @@
-#include <iostream>
-#include <cmath>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(void)
-{
-    // Maximun number to have in an array.
-    int num1 = 6;
-    int num2 = 6;
-    
-    //Multidimesional Array of n * n
-    int array[num1][num2];
-    
-    // User input to fill in the array.
-    for (int i = 0; i < num1; i++)
-    {
-        for (int j = 0; j < num2; j++)
-        {
-            cin  >> array[i][j];
-        }
-    }
-    
-    // Assigning the first value of the sum of hourglass in the array to the variable max.
-    int max = array[0][0] + array[0][1] + array[0][2] + array[1][1] + array[2][0] + array[2][1] + array[2][2];
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
 
-    for (int i = 0; i < num1 - 2; i++)
+/*
+ * Complete the 'hourglassSum' function below.
+ *
+ * The function is expected to return an INTEGER.
+ * The function accepts 2D_INTEGER_ARRAY arr as parameter.
+ */
+
+int hourglassSum(vector<vector<int>> arr) {
+    int max = arr[0][0] + arr[0][1] + arr[0][2] + arr[1][1] + arr[2][0] + arr[2][1] + arr[2][2];
+    int size = (int) arr.size();
+    
+    for (int i = 0; i < size; ++i)
     {
-        for (int j = 0; j < num2 - 2; j++)
+        for (int j = 0; j < size; ++j)
         {
-            // To determine the maximum number of the sum of the hourglass.
-            if (array[i][j] + array[i][j + 1] + array[i][j + 2] + array[i + 1][j + 1] + array[i + 2][j] + array[i + 2][j + 1] + array[i + 2][j + 2] > max)
+            if (arr[i][j] + arr[i][j + 1] + arr[i][j + 2] + arr[i + 1][j + 1] + arr[i + 2][j] + arr[i + 2][j + 1] + arr[i + 2][j + 2] > max)
             {
-                max = array[i][j] + array[i][j + 1] + array[i][j + 2] + array[i + 1][j + 1] + array[i + 2][j] + array[i + 2][j + 1] + array[i + 2][j + 2];
+                max = arr[i][j] + arr[i][j + 1] + arr[i][j + 2] + arr[i + 1][j + 1] + arr[i + 2][j] + arr[i + 2][j + 1] + arr[i + 2][j + 2];
             }
         }
     }
-    
-    // Display the maximum number in the hourglass array.
-    cout << "Maximum number = " << max << endl;
-    
+
+    return max;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    vector<vector<int>> arr(6);
+
+    for (int i = 0; i < 6; i++) {
+        arr[i].resize(6);
+
+        string arr_row_temp_temp;
+        getline(cin, arr_row_temp_temp);
+
+        vector<string> arr_row_temp = split(rtrim(arr_row_temp_temp));
+
+        for (int j = 0; j < 6; j++) {
+            int arr_row_item = stoi(arr_row_temp[j]);
+
+            arr[i][j] = arr_row_item;
+        }
+    }
+
+    int result = hourglassSum(arr);
+
+    fout << result << "\n";
+
+    fout.close();
+
     return 0;
-} // End of main
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
