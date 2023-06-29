@@ -1,52 +1,117 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int main(void)
-{
-    // User input a number to shift to the left
-    int leftShift;
-    cin  >> leftShift;
-    
-    // User input to enter a maximum size of an array
-    int arraySize;
-    cin  >> arraySize;
-    
-    // Array of arraySize
-    int array[arraySize];
-    
-    // User input to fill in the array using numbers.
-    for (int i = 0; i < arraySize; i++)
-    {
-        cin  >> array[i];
-    }
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
 
-    // leftShift the array leftShift times
-    for (int i = 0; i < leftShift; i++)
+/*
+ * Complete the 'rotateLeft' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts following parameters:
+ *  1. INTEGER d
+ *  2. INTEGER_ARRAY arr
+ */
+
+vector<int> rotateLeft(int d, vector<int> arr) {
+    int size = (int)arr.size();
+
+    for (int i = 0; i < d; ++i)
     {
-        int j, first;
-        
-        // Stores the first element of the array
-        first = array[0];
-        
-        for (j = 0; j < arraySize - 1; j++)
+        int j, first = arr[0];
+
+        for (j = 0; j < size - 1; ++j)
         {
-            array[j] = array[j + 1];
+            arr[j] = arr[j + 1];
         }
-        
+
         // First element of array will be added to the end
-        array[j] = first;
-    }
-    
-    cout << endl;
-
-    // Display the shifted array
-    for (int i = 0; i < arraySize; i++)
-    {
-        cout << array[i] << " ";
+        arr[j] = first;
     }
 
-    cout << endl;
-    
+    return arr;
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string first_multiple_input_temp;
+    getline(cin, first_multiple_input_temp);
+
+    vector<string> first_multiple_input = split(rtrim(first_multiple_input_temp));
+
+    int n = stoi(first_multiple_input[0]);
+
+    int d = stoi(first_multiple_input[1]);
+
+    string arr_temp_temp;
+    getline(cin, arr_temp_temp);
+
+    vector<string> arr_temp = split(rtrim(arr_temp_temp));
+
+    vector<int> arr(n);
+
+    for (int i = 0; i < n; i++) {
+        int arr_item = stoi(arr_temp[i]);
+
+        arr[i] = arr_item;
+    }
+
+    vector<int> result = rotateLeft(d, arr);
+
+    for (size_t i = 0; i < result.size(); i++) {
+        fout << result[i];
+
+        if (i != result.size() - 1) {
+            fout << " ";
+        }
+    }
+
+    fout << "\n";
+
+    fout.close();
+
     return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
+    }
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
 }
