@@ -1,17 +1,25 @@
-#include <iostream>
-#include <vector>
-#include <string>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-vector<string> split_string(string);
+string ltrim(const string &);
+string rtrim(const string &);
+vector<string> split(const string &);
 
-// Complete the arrayManipulation function below.
-long arrayManipulation(int n, vector<vector<int>> queries)
-{
+/*
+ * Complete the 'arrayManipulation' function below.
+ *
+ * The function is expected to return a LONG_INTEGER.
+ * The function accepts following parameters:
+ *  1. INTEGER n
+ *  2. 2D_INTEGER_ARRAY queries
+ */
+
+long arrayManipulation(int n, vector<vector<int>> queries) {
     vector<long int> outputArray(n, 0);
+    int queriesSize = (int)queries.size();
     
-    for (long i = 0; i < queries.size(); i++)
+    for (long i = 0; i < queriesSize; i++)
     {
         outputArray[(queries[i][0]) - 1] += queries[i][2];
         // outputArray[(queries[i][0]) - 1] = outputArray[(queries[i][0]) - 1] + queries[i][2];
@@ -39,62 +47,79 @@ long arrayManipulation(int n, vector<vector<int>> queries)
 
 int main()
 {
-    string nm_temp;
-    getline(cin, nm_temp);
-    
-    vector<string> nm = split_string(nm_temp);
-    
-    int n = stoi(nm[0]);
-    
-    int m = stoi(nm[1]);
-    
-    vector<vector<int>> queries(m);
-    for (int i = 0; i < m; i++)
-    {
-        queries[i].resize(3);
-        
-        for (int j = 0; j < 3; j++)
-        {
-            cin >> queries[i][j];
-        }
-        
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    }
-    
-    long result = arrayManipulation(n, queries);
-    
-    cout << result << endl;
-    
-    return 0;
-} // end of main
+    ofstream fout(getenv("OUTPUT_PATH"));
 
-vector<string> split_string(string input_string)
-{
-    string::iterator new_end = unique(input_string.begin(), input_string.end(), [] (const char &x, const char &y) {
-        return x == y and x == ' ';
-    });
-    
-    input_string.erase(new_end, input_string.end());
-    
-    while (input_string[input_string.length() - 1] == ' ') {
-        input_string.pop_back();
+    string first_multiple_input_temp;
+    getline(cin, first_multiple_input_temp);
+
+    vector<string> first_multiple_input = split(rtrim(first_multiple_input_temp));
+
+    int n = stoi(first_multiple_input[0]);
+
+    int m = stoi(first_multiple_input[1]);
+
+    vector<vector<int>> queries(m);
+
+    for (int i = 0; i < m; i++) {
+        queries[i].resize(3);
+
+        string queries_row_temp_temp;
+        getline(cin, queries_row_temp_temp);
+
+        vector<string> queries_row_temp = split(rtrim(queries_row_temp_temp));
+
+        for (int j = 0; j < 3; j++) {
+            int queries_row_item = stoi(queries_row_temp[j]);
+
+            queries[i][j] = queries_row_item;
+        }
     }
-    
-    vector<string> splits;
-    char delimiter = ' ';
-    
-    size_t i = 0;
-    size_t pos = input_string.find(delimiter);
-    
-    while (pos != string::npos) {
-        splits.push_back(input_string.substr(i, pos - i));
-        
-        i = pos + 1;
-        pos = input_string.find(delimiter, i);
+
+    long result = arrayManipulation(n, queries);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
+}
+
+vector<string> split(const string &str) {
+    vector<string> tokens;
+
+    string::size_type start = 0;
+    string::size_type end = 0;
+
+    while ((end = str.find(" ", start)) != string::npos) {
+        tokens.push_back(str.substr(start, end - start));
+
+        start = end + 1;
     }
-    
-    splits.push_back(input_string.substr(i, min(pos, input_string.length()) - i + 1));
-    
-    return splits;
-} // end of split_string
+
+    tokens.push_back(str.substr(start));
+
+    return tokens;
+}
 
