@@ -1,80 +1,104 @@
-#include <iostream>
-#include <vector>
-
 using namespace std;
 
-// The solution to the sparse array function
-vector<int> matchingStrings(vector<string> strings, vector<string> queries)
-{
+string ltrim(const string &);
+string rtrim(const string &);
+
+/*
+ * Complete the 'matchingStrings' function below.
+ *
+ * The function is expected to return an INTEGER_ARRAY.
+ * The function accepts following parameters:
+ *  1. STRING_ARRAY stringList
+ *  2. STRING_ARRAY queries
+ */
+
+vector<int> matchingStrings(vector<string> stringList, vector<string> queries) {
     vector<int> result;
-    
-    for (int q = 0; q < queries.size(); q++)
+    int stringListSize = (int)stringList.size();
+    int queriesSize = (int)queries.size();
+
+    for (int q = 0; q < queriesSize; ++q)
     {
         int count = 0;
-        
-        for (int s = 0; s < strings.size(); s++)
+
+        for (int s = 0; s < stringListSize; ++s)
         {
-            if (queries[q] == strings[s])
+            if (queries[q] == stringList[s])
             {
                 count++;
             }
         }
-        result.push_back(count);
+        result .push_back(count);
     }
-    
-    return result;
 }
 
-
-
-int main(void)
+int main()
 {
-    // User input to get the maximum size of the vector containing strings
-    int stringsCount;
-    cin >> stringsCount;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    
-    vector<string> strings(stringsCount);
-    
-    // User input to fill in the vector containing strings
-    for (int i = 0; i < stringsCount; i++)
-    {
-        string stringItem;
-        getline(cin, stringItem);
-        
-        strings[i] = stringItem;
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string stringList_count_temp;
+    getline(cin, stringList_count_temp);
+
+    int stringList_count = stoi(ltrim(rtrim(stringList_count_temp)));
+
+    vector<string> stringList(stringList_count);
+
+    for (int i = 0; i < stringList_count; i++) {
+        string stringList_item;
+        getline(cin, stringList_item);
+
+        stringList[i] = stringList_item;
     }
-    
-    // User input to get the maximum size of the vector containing queries
-    int queriesCount;
-    cin >> queriesCount;
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-    
-    vector<string> queries(queriesCount);
-    
-    // User input to fill in the vector containing queries
-    for (int i = 0; i < queriesCount; i++)
-    {
-        string queriesItem;
-        getline(cin, queriesItem);
-        
-        queries[i] = queriesItem;
+
+    string queries_count_temp;
+    getline(cin, queries_count_temp);
+
+    int queries_count = stoi(ltrim(rtrim(queries_count_temp)));
+
+    vector<string> queries(queries_count);
+
+    for (int i = 0; i < queries_count; i++) {
+        string queries_item;
+        getline(cin, queries_item);
+
+        queries[i] = queries_item;
     }
-    
-    vector<int> res = matchingStrings(strings, queries);
-    
-    // Displaying the result
-    for (int i = 0; i < res.size(); i++)
-    {
-        cout << res[i];
-        
-        if (i != res.size() - 1)
-        {
-            cout << endl;
+
+    vector<int> res = matchingStrings(stringList, queries);
+
+    for (size_t i = 0; i < res.size(); i++) {
+        fout << res[i];
+
+        if (i != res.size() - 1) {
+            fout << "\n";
         }
     }
-    
-    cout << endl;
-    
+
+    fout << "\n";
+
+    fout.close();
+
     return 0;
+}
+
+string ltrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        s.begin(),
+        find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace)))
+    );
+
+    return s;
+}
+
+string rtrim(const string &str) {
+    string s(str);
+
+    s.erase(
+        find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(),
+        s.end()
+    );
+
+    return s;
 }
